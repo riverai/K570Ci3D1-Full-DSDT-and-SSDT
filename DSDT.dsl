@@ -8452,7 +8452,8 @@ DefinitionBlock ("DSDT.aml", "DSDT", 1, "HASEE ", "PARADISE", 0x00000000)
 
     Method (_WAK, 1, Serialized)  // _WAK: Wake
     {
-        P8XH (0x04, 0xE2, Zero)
+        If (LOr(LLess(Arg0,1),LGreater(Arg0,5))) { Store(3,Arg0) }
+P8XH (0x04, 0xE2, Zero)
         P8XH (0x04, 0xE2, One)
         Store (Zero, P80D)
         If (NEXP)
