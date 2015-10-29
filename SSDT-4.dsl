@@ -855,7 +855,7 @@ DefinitionBlock ("SSDT4.aml", "SSDT", 1, "HASEE ", "PARADISE", 0x00003000)
             }
         }
 
-        Device (GFX0)
+        Device (IGPU)
         {
             Name (_ADR, 0x00020000)  // _ADR: Address
             Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
@@ -2381,7 +2381,7 @@ DefinitionBlock ("SSDT4.aml", "SSDT", 1, "HASEE ", "PARADISE", 0x00003000)
 
                     If (LAnd (LGreaterEqual (Arg0, Zero), LLessEqual (Arg0, 0x64)))
                     {
-                        \_SB.PCI0.GFX0.AINT (One, Arg0)
+                        \_SB.PCI0.IGPU.AINT (One, Arg0)
                         Store (Arg0, BRTL)
                     }
                 }
@@ -2669,7 +2669,7 @@ DefinitionBlock ("SSDT4.aml", "SSDT", 1, "HASEE ", "PARADISE", 0x00003000)
 
                     If (LAnd (LGreaterEqual (Arg0, Zero), LLessEqual (Arg0, 0x64)))
                     {
-                        \_SB.PCI0.GFX0.AINT (One, Arg0)
+                        \_SB.PCI0.IGPU.AINT (One, Arg0)
                     }
                 }
 
@@ -3487,7 +3487,7 @@ DefinitionBlock ("SSDT4.aml", "SSDT", 1, "HASEE ", "PARADISE", 0x00003000)
                     }
                     Else
                     {
-                        Notify (\_SB.PCI0.GFX0, Arg1)
+                        Notify (\_SB.PCI0.IGPU, Arg1)
                     }
                 }
 
@@ -3497,7 +3497,7 @@ DefinitionBlock ("SSDT4.aml", "SSDT", 1, "HASEE ", "PARADISE", 0x00003000)
                 }
                 Else
                 {
-                    Notify (\_SB.PCI0.GFX0, 0x80)
+                    Notify (\_SB.PCI0.IGPU, 0x80)
                 }
 
                 Return (Zero)
