@@ -49,21 +49,21 @@ DefinitionBlock ("DSDT.aml", "DSDT", 1, "HASEE ", "PARADISE", 0x00000000)
     External (_PR_.CPU0._PSS, PkgObj)
     External (_SB_.PCCD, UnknownObj)
     External (_SB_.PCCD.PENB, UnknownObj)
-    External (_SB_.PCI0.GFX0, UnknownObj)
-    External (_SB_.PCI0.GFX0.CLID, FieldUnitObj)
-    External (_SB_.PCI0.GFX0.DD1F, UnknownObj)
-    External (_SB_.PCI0.GFX0.DD1F.BRDN, MethodObj)    // 0 Arguments
-    External (_SB_.PCI0.GFX0.DD1F.BRDT, MethodObj)    // 0 Arguments
-    External (_SB_.PCI0.GFX0.DD1F.BRDX, MethodObj)    // 0 Arguments
-    External (_SB_.PCI0.GFX0.DD1F.BRUP, MethodObj)    // 0 Arguments
-    External (_SB_.PCI0.GFX0.DD1F.LGBR, MethodObj)    // 1 Arguments
-    External (_SB_.PCI0.GFX0.DD1F.QBCM, MethodObj)    // 1 Arguments
-    External (_SB_.PCI0.GFX0.DD1F.QBQC, MethodObj)    // 0 Arguments
-    External (_SB_.PCI0.GFX0.GHDS, MethodObj)    // 1 Arguments
-    External (_SB_.PCI0.GFX0.GLID, MethodObj)    // 1 Arguments
-    External (_SB_.PCI0.GFX0.GSCI, MethodObj)    // 0 Arguments
-    External (_SB_.PCI0.GFX0.GSSE, FieldUnitObj)
-    External (_SB_.PCI0.GFX0.IUEH, MethodObj)    // 1 Arguments
+    External (_SB_.PCI0.IGPU, UnknownObj)
+    External (_SB_.PCI0.IGPU.CLID, FieldUnitObj)
+    External (_SB_.PCI0.IGPU.DD1F, UnknownObj)
+    External (_SB_.PCI0.IGPU.DD1F.BRDN, MethodObj)    // 0 Arguments
+    External (_SB_.PCI0.IGPU.DD1F.BRDT, MethodObj)    // 0 Arguments
+    External (_SB_.PCI0.IGPU.DD1F.BRDX, MethodObj)    // 0 Arguments
+    External (_SB_.PCI0.IGPU.DD1F.BRUP, MethodObj)    // 0 Arguments
+    External (_SB_.PCI0.IGPU.DD1F.LGBR, MethodObj)    // 1 Arguments
+    External (_SB_.PCI0.IGPU.DD1F.QBCM, MethodObj)    // 1 Arguments
+    External (_SB_.PCI0.IGPU.DD1F.QBQC, MethodObj)    // 0 Arguments
+    External (_SB_.PCI0.IGPU.GHDS, MethodObj)    // 1 Arguments
+    External (_SB_.PCI0.IGPU.GLID, MethodObj)    // 1 Arguments
+    External (_SB_.PCI0.IGPU.GSCI, MethodObj)    // 0 Arguments
+    External (_SB_.PCI0.IGPU.GSSE, FieldUnitObj)
+    External (_SB_.PCI0.IGPU.IUEH, MethodObj)    // 1 Arguments
     External (_SB_.PCI0.PEG0, UnknownObj)
     External (_SB_.PCI0.PEG0.HPME, MethodObj)    // 0 Arguments
     External (_SB_.PCI0.PEG0.PEGP, UnknownObj)
@@ -3350,10 +3350,10 @@ DefinitionBlock ("DSDT.aml", "DSDT", 1, "HASEE ", "PARADISE", 0x00000000)
                                             Store (MAR2, OSDV)
                                             If (LAnd (LGreater (OSYS, 0x07D0), LLess (OSYS, 0x07D6)))
                                             {
-                                                ^^PCI0.GFX0.DD1F.QBCM (CMSR (0x63))
+                                                ^^PCI0.IGPU.DD1F.QBCM (CMSR (0x63))
                                             }
 
-                                            Store (^^PCI0.GFX0.DD1F.BRDX (), BRST)
+                                            Store (^^PCI0.IGPU.DD1F.BRDX (), BRST)
                                             Return (OSDV)
                                         }
                                         Else
@@ -4212,7 +4212,7 @@ DefinitionBlock ("DSDT.aml", "DSDT", 1, "HASEE ", "PARADISE", 0x00000000)
                         If (LEqual (SWPF, Zero))
                         {
                             Store (One, SWPF)
-                            ^^^GFX0.GHDS (Zero)
+                            ^^^IGPU.GHDS (Zero)
                             Sleep (0xC8)
                             Store (Zero, SWPF)
                         }
@@ -4537,12 +4537,12 @@ DefinitionBlock ("DSDT.aml", "DSDT", 1, "HASEE ", "PARADISE", 0x00000000)
                         {
                             If (LAnd (LGreater (OSYS, 0x07D0), LLess (OSYS, 0x07D6)))
                             {
-                                ^^^GFX0.DD1F.QBCM (^^^GFX0.DD1F.BRDN ())
+                                ^^^IGPU.DD1F.QBCM (^^^IGPU.DD1F.BRDN ())
                             }
                             Else
                             {
-                                Store (^^^GFX0.DD1F.BRDT (), BRST)
-                                Notify (^^^GFX0.DD1F, 0x87)
+                                Store (^^^IGPU.DD1F.BRDT (), BRST)
+                                Notify (^^^IGPU.DD1F, 0x87)
                             }
 
                             If (LLessEqual (BRST, One))
@@ -4566,12 +4566,12 @@ DefinitionBlock ("DSDT.aml", "DSDT", 1, "HASEE ", "PARADISE", 0x00000000)
                         {
                             If (LAnd (LGreater (OSYS, 0x07D0), LLess (OSYS, 0x07D6)))
                             {
-                                ^^^GFX0.DD1F.QBCM (^^^GFX0.DD1F.BRUP ())
+                                ^^^IGPU.DD1F.QBCM (^^^IGPU.DD1F.BRUP ())
                             }
                             Else
                             {
-                                Store (^^^GFX0.DD1F.BRDT (), BRST)
-                                Notify (^^^GFX0.DD1F, 0x86)
+                                Store (^^^IGPU.DD1F.BRDT (), BRST)
+                                Notify (^^^IGPU.DD1F, 0x86)
                             }
 
                             If (LGreaterEqual (BRST, 0x09))
@@ -4844,13 +4844,13 @@ DefinitionBlock ("DSDT.aml", "DSDT", 1, "HASEE ", "PARADISE", 0x00000000)
                                                                                     {
                                                                                         If (LAnd (LGreater (OSYS, 0x07D0), LLess (OSYS, 0x07D6)))
                                                                                         {
-                                                                                            ^^^GFX0.DD1F.QBCM (^^^GFX0.DD1F.BRUP ())
+                                                                                            ^^^IGPU.DD1F.QBCM (^^^IGPU.DD1F.BRUP ())
                                                                                             Store (0x0140, ^^MAP1.CAUS)
                                                                                             Notify (MAP1, 0x80)
                                                                                         }
                                                                                         Else
                                                                                         {
-                                                                                            Notify (^^^GFX0.DD1F, 0x86)
+                                                                                            Notify (^^^IGPU.DD1F, 0x86)
                                                                                         }
 
                                                                                         If (And (^^MAP1.OSDP, One))
@@ -4866,13 +4866,13 @@ DefinitionBlock ("DSDT.aml", "DSDT", 1, "HASEE ", "PARADISE", 0x00000000)
                                                                                         {
                                                                                             If (LAnd (LGreater (OSYS, 0x07D0), LLess (OSYS, 0x07D6)))
                                                                                             {
-                                                                                                ^^^GFX0.DD1F.QBCM (^^^GFX0.DD1F.BRDN ())
+                                                                                                ^^^IGPU.DD1F.QBCM (^^^IGPU.DD1F.BRDN ())
                                                                                                 Store (0x0140, ^^MAP1.CAUS)
                                                                                                 Notify (MAP1, 0x80)
                                                                                             }
                                                                                             Else
                                                                                             {
-                                                                                                Notify (^^^GFX0.DD1F, 0x87)
+                                                                                                Notify (^^^IGPU.DD1F, 0x87)
                                                                                             }
 
                                                                                             If (And (^^MAP1.OSDP, One))
@@ -5413,9 +5413,9 @@ DefinitionBlock ("DSDT.aml", "DSDT", 1, "HASEE ", "PARADISE", 0x00000000)
                                 {
                                     If (LNotEqual (Local0, LIDS))
                                     {
-                                        If (^^^GFX0.GLID (Local0))
+                                        If (^^^IGPU.GLID (Local0))
                                         {
-                                            Or (0x80000000, ^^^GFX0.CLID, ^^^GFX0.CLID)
+                                            Or (0x80000000, ^^^IGPU.CLID, ^^^IGPU.CLID)
                                         }
                                     }
                                 }
@@ -6481,7 +6481,7 @@ DefinitionBlock ("DSDT.aml", "DSDT", 1, "HASEE ", "PARADISE", 0x00000000)
                                 {
                                     If (IGDS)
                                     {
-                                        Store (^^^GFX0.DD1F.QBQC (), Local0)
+                                        Store (^^^IGPU.DD1F.QBQC (), Local0)
                                     }
 
                                     Return (Local0)
@@ -6497,7 +6497,7 @@ DefinitionBlock ("DSDT.aml", "DSDT", 1, "HASEE ", "PARADISE", 0x00000000)
 
                                         If (IGDS)
                                         {
-                                            ^^^GFX0.DD1F.QBCM (MAR2)
+                                            ^^^IGPU.DD1F.QBCM (MAR2)
                                         }
                                     }
                                     Else
@@ -7050,12 +7050,12 @@ DefinitionBlock ("DSDT.aml", "DSDT", 1, "HASEE ", "PARADISE", 0x00000000)
 
                                         If (LEqual (MAR2, 0x09000086))
                                         {
-                                            Notify (^^^GFX0.DD1F, 0x86)
+                                            Notify (^^^IGPU.DD1F, 0x86)
                                         }
 
                                         If (LEqual (MAR2, 0x09000087))
                                         {
-                                            Notify (^^^GFX0.DD1F, 0x87)
+                                            Notify (^^^IGPU.DD1F, 0x87)
                                         }
 
                                         Return (Zero)
@@ -7496,8 +7496,8 @@ DefinitionBlock ("DSDT.aml", "DSDT", 1, "HASEE ", "PARADISE", 0x00000000)
                         {
                             Store (CMSR (0x63), Local1)
                             Store (CMSR (0x64), Local0)
-                            Store (^^^GFX0.DD1F.LGBR (Local1), Local1)
-                            Store (^^^GFX0.DD1F.LGBR (Local0), Local0)
+                            Store (^^^IGPU.DD1F.LGBR (Local1), Local1)
+                            Store (^^^IGPU.DD1F.LGBR (Local0), Local0)
                             Or (ShiftLeft (Local1, 0x04), Local0, Local0)
                             Or (ShiftLeft (Local0, 0x10), CAUS, Local0)
                             Store (Zero, ^^EC0.WHOK)
@@ -8694,7 +8694,7 @@ P8XH (0x04, 0xE2, Zero)
             Store (SS48, \_SB.PCI0.LPCB.EC0.WIN8)
             If (LAnd (LGreater (OSYS, 0x07D0), LLess (OSYS, 0x07D6)))
             {
-                Notify (\_SB.PCI0.GFX0, 0x80)
+                Notify (\_SB.PCI0.IGPU, 0x80)
             }
         }
 
@@ -9164,7 +9164,7 @@ P8XH (0x04, 0xE2, Zero)
                 0x02, 
                 Package (0x01)
                 {
-                    "\\_SB.PCI0.GFX0"
+                    "\\_SB.PCI0.IGPU"
                 }, 
 
                 Package (0x01)
@@ -9176,7 +9176,7 @@ P8XH (0x04, 0xE2, Zero)
             {
                 Package (0x02)
                 {
-                    "\\_SB.PCI0.GFX0", 
+                    "\\_SB.PCI0.IGPU", 
                     Ones
                 }, 
 
@@ -9286,7 +9286,7 @@ P8XH (0x04, 0xE2, Zero)
 
                 Package (0x03)
                 {
-                    "\\_SB.PCI0.GFX0", 
+                    "\\_SB.PCI0.IGPU", 
                     One, 
                     Package (0x02)
                     {
@@ -9689,7 +9689,7 @@ P8XH (0x04, 0xE2, Zero)
                                         One, 
                                         Package (0x01)
                                         {
-                                            "\\_SB.PCI0.GFX0"
+                                            "\\_SB.PCI0.IGPU"
                                         }
                                     })
                                 }
@@ -10667,9 +10667,9 @@ P8XH (0x04, 0xE2, Zero)
 
         Method (_L06, 0, NotSerialized)  // _Lxx: Level-Triggered GPE
         {
-            If (LAnd (\_SB.PCI0.GFX0.GSSE, LNot (GSMI)))
+            If (LAnd (\_SB.PCI0.IGPU.GSSE, LNot (GSMI)))
             {
-                \_SB.PCI0.GFX0.GSCI ()
+                \_SB.PCI0.IGPU.GSCI ()
             }
         }
 
@@ -10856,7 +10856,7 @@ P8XH (0x04, 0xE2, Zero)
             {
                 ADBG ("Rotation Lock")
                 Sleep (0x03E8)
-                \_SB.PCI0.GFX0.IUEH (0x04)
+                \_SB.PCI0.IGPU.IUEH (0x04)
             }
         }
     }
