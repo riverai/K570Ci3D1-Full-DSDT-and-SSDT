@@ -8261,6 +8261,10 @@ DefinitionBlock ("DSDT.aml", "DSDT", 1, "HASEE ", "PARADISE", 0x00000000)
                     })
                 }
             }
+            Device (IMEI)
+            {
+                Name (_ADR, 0x00160000)
+            }
         }
     }
 
