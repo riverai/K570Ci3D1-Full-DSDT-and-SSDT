@@ -1034,7 +1034,6 @@ DefinitionBlock ("SSDT5.aml", "SSDT", 1, "HASEE ", "PARADISE", 0x00001000)
             Method (_BCM, 1, NotSerialized)  // _BCM: Brightness Control Method
             {
                 Return (\_SB.PCI0.GFX0.DD02._BCM)
-                Arg0
             }
         }
 
