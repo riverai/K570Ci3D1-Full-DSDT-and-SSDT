@@ -681,6 +681,9 @@ DefinitionBlock ("SSDT5.aml", "SSDT", 1, "HASEE ", "PARADISE", 0x00001000)
         Method (_INI, 0, NotSerialized)  // _INI: Initialize
         {
             Store (Zero, \_SB.PCI0.PEG0.PEGP._ADR)
+            //added to turn nvidia/radeon off
+            //External(\_SB.PCI0.PEG0.PEGP._OFF, MethodObj)
+            _OFF()
         }
 
         Method (_ON, 0, Serialized)  // _ON_: Power On
