@@ -31,10 +31,10 @@ BIOS Version BP212.
 
 如果你不对SSDT5做一次SSDT cleanup fix(这将删除多个在OSX下完全无用的方法和设备,同时包含SSDT5的_DSM方法),你将很可能不能使用_OFF禁用独立显卡.
 
-##使用SSDT直接来加入显卡的IG..ID.
-Rename B0D3 to HDAU会在集成显卡的位置插入一个简单的_DSM,或许是因为集成显卡已经改名,或许是clover bug,最可能的却是,如果用clover来加入这个显卡的IG--ID ,会遭遇这里重复定义的_DSM,以至于显卡驱动失败.
+##使用SSDT直接来加入显卡的ig-platform-id
+Rename B0D3 to HDAU会在集成显卡的位置插入一个简单的_DSM,或许是因为集成显卡已经改名,或许是clover bug,最可能的却是,如果用clover来加入这个显卡的ig-platform-id ,会遭遇这里重复定义的_DSM,以至于显卡驱动失败.
 
-所以,应当,先用Rename B0D3 to HDAU 然后直接手动加入显卡ID,这样的做法,后来的_DSM将和为声卡添加的_DSM合并.
+所以,应当,先用Rename B0D3 to HDAU 然后直接手动加入显卡ig-platform-id,这样的做法,后来的_DSM将和为声卡添加的_DSM合并.
 
 ##电池代码
 
