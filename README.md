@@ -21,15 +21,26 @@ BIOS Version BP212.
 
 所以,你也应该提取自己的DSDT,而且是在一个以后你想作为基准的状态,比如我就在Ubuntu能识别我的光驱硬盘的情况下提取的DSDT.
 
-##一点额外的经验
-
+##风扇高速旋转
 我的DSDT和SSDT如果一开始就按照Rehabman的说法移除所有的_DSM,那么会遇到风扇无法低速旋转的问题,也就是说一直都很吵....
+
 
 
 而Rehabman如此建议只因部分_DSM会妨碍我们需要的代码的正确执行,实际也正是如此.
 
 
 如果你不对SSDT5做一次SSDT cleanup fix(这将删除多个在OSX下完全无用的方法和设备,同时包含SSDT5的_DSM方法),你将很可能不能使用_OFF禁用独立显卡.
+
+那么：
+
+1 Rehabman的方法先移除所有DSM，导致风扇失去控制。换DSDT马上改善。
+
+2 不移除SSDT5的DSM，无法禁用独显。
+
+3 折中方法，只移除SSDT5的DSM，有效。
+
+4 折中方法突然失效，**只在Mac OS X 下风扇狂转，睡眠再唤醒即正常**确认没有DSDT和SSDT问题。这很诡异，那么问题何在呢？  **通过我的猜想和验证，这可能发生在新安装了UBuntu系统之后，而重新进入BIOS，随便改点设置然后保存设置即可修复此问题。**DSDT和SSDT表都来自BIOS，安装系统或是其他奇怪的原因让我需要重新保存BIOS设置，说明这里可能有还不太清楚的关联，总之能改变就好。
+
 
 ##使用SSDT直接来加入显卡的ig-platform-id
 Rename B0D3 to HDAU会在集成显卡的位置插入一个简单的_DSM,或许是因为集成显卡已经改名,或许是clover bug,最可能的却是,如果用clover来加入这个显卡的ig-platform-id ,会遭遇这里重复定义的_DSM,以至于显卡驱动失败.
@@ -45,5 +56,17 @@ Rename B0D3 to HDAU会在集成显卡的位置插入一个简单的_DSM,或许�
 [http://raw.github.com/Yuki-Judai/dxxs-DSDT-Patch/master](http://raw.github.com/Yuki-Judai/dxxs-DSDT-Patch/master)
 
 
-即可使用.
+##网卡
 
+推荐使用AR9280，将REGdomain设置到0x11。这是最完美的选择，对于的是HK（对这张卡，0x21是错误的以讹传讹，人云亦云的HK）。
+
+##声卡 
+ALC282 使用Clover配合dummyHDA即可使用原版APPLEHDA。
+
+##USB
+
+首先使用0X0D，之后再安装FakeXhci即可正确识别和使用正确的USB总线（2.0或3.0，根据设备种类而不同）。
+
+##显卡
+
+HD4600使用FakePCIID和FakeHD4600驱动，配合DSDT的正确的ig-platform-id。
