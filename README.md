@@ -4,6 +4,22 @@ K570CD1 DSDT与SSDT的原内容与修订以进行Hackintosh安装.
 BIOS Version BP212.
 
 
+
+### Clover推荐配置
+
+推荐你的Clover config总是有以下配置，防止出现浮点区域问题。
+
+```
+			<key>Fixes</key>
+			<dict>
+				<key>FixRegions_10000000</key>
+				<true/>
+				<key>NewWay_80000000</key>
+				<true/>
+			</dict>
+```
+
+
 ##我是原生i3D1的版本 已手动更换为i7
 
 
