@@ -5,7 +5,12 @@ BIOS Version BP212.
 
 ### 总体状态
 
+**非常好**，如果你开启了HDDPI模式，那么这款价格不超过3900人民币的笔记本绝对不会让你失望。运行稳定，屏幕优良（97%sRGB覆盖），而且超级便利的随意组装的特性，不存在硬伤。唯一的缺陷就是触摸板的驱动不是特别完美。
+
 ### 怎样安装更新
+**安装系统更新时可能会影响到USB驱动，某些奇葩USB外设也可能阻止你在安装更新后重启电脑，所以，拔掉这些USB外设才能比较好的更新。**
+
+更新系统之后，需要先更新缓存再启动，也就是说，请先用without cache启动OS X，进入系统再重建缓存，如此即完成整个更新流程。
 
 
 ### Clover推荐配置
@@ -80,6 +85,54 @@ Rename B0D3 to HDAU会在集成显卡的位置插入一个简单的_DSM,或许�
 
 ##声卡 
 ALC282 使用Clover配合dummyHDA即可使用原版APPLEHDA。
+
+Clover加入以下代码再配合使用DummyHDA，设置声卡layoutid为3.
+
+```
+			<dict>
+				<key>Comment</key>
+				<string>additional for applehda</string>
+				<key>Find</key>
+				<data>
+				gxnUEQ==
+				</data>
+				<key>Name</key>
+				<string>AppleHDA</string>
+				<key>Replace</key>
+				<data>
+				AAAAAA==
+				</data>
+			</dict>
+			<dict>
+				<key>Comment</key>
+				<string>AppleHDA - ALC282 (1 of 3)</string>
+				<key>Find</key>
+				<data>
+				hBnUEQ==
+				</data>
+				<key>Name</key>
+				<string>AppleHDA</string>
+				<key>Replace</key>
+				<data>
+				ggLsEA==
+				</data>
+			</dict>
+			<dict>
+				<key>Comment</key>
+				<string>AppleHDA - ALC282 (3 of 3)</string>
+				<key>Find</key>
+				<data>
+				hQjsEA==
+				</data>
+				<key>Name</key>
+				<string>AppleHDA</string>
+				<key>Replace</key>
+				<data>
+				AAAAAA==
+				</data>
+			</dict>
+```
+
 
 ##USB
 
