@@ -78,6 +78,19 @@ Rename B0D3 to HDAU会在集成显卡的位置插入一个简单的_DSM,或许�
 
 [http://raw.github.com/Yuki-Judai/dxxs-DSDT-Patch/master](http://raw.github.com/Yuki-Judai/dxxs-DSDT-Patch/master)
 
+##USB
+
+首先使用0X0D不要重命名，之后再安装FakeXhci即可正确识别和使用正确的USB总线（2.0或3.0，根据设备种类而不同）。
+
+当然，你也可以采取比较麻烦的做法自行制作正确的USB injector，做好了给我一份:-D。
+
+##显卡
+
+HD4600使用FakePCIID和FakeHD4600驱动，配合DSDT的正确的ig-platform-id和Device iD。Rehabman graphics_HD4600_yosemite.txt。
+
+### 用到的其它DSDT Patch
+
+实际上看下我的历史记录就知道了，额外说明只为简化。待续。
 
 ##网卡
 
@@ -141,15 +154,7 @@ Clover加入以下代码再配合使用DummyHDA，设置声卡layoutid为3.
 ```
 
 
-##USB
 
-首先使用0X0D不要重命名，之后再安装FakeXhci即可正确识别和使用正确的USB总线（2.0或3.0，根据设备种类而不同）。
-
-当然，你也可以采取比较麻烦的做法自行制作正确的USB injector，做好了给我一份:-D。
-
-##显卡
-
-HD4600使用FakePCIID和FakeHD4600驱动，配合DSDT的正确的ig-platform-id。
 
 
 ### The End
