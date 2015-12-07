@@ -3,6 +3,9 @@ K570CD1 DSDT与SSDT的原内容与修订以进行Hackintosh安装.
 
 BIOS Version BP212.
 
+### 总体状态
+
+### 怎样安装更新
 
 
 ### Clover推荐配置
