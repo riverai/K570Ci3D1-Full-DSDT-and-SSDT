@@ -81,7 +81,7 @@ Rename B0D3 to HDAU会在集成显卡的位置插入一个简单的_DSM。如果
 ##USB
 10.11 USB相关的研究一直有，就是说就连Rehabman都在一直改写USB的适配方法。
 
-在以往（10.11-10.11.2），我都不用把USB的相关东西改名为ECHX，直接使用普通的10.11 USB补丁，Darwin到Windows模拟，加上FakeXHCI即可相当完美。但是，到了2016年，10.11.3系统配合新的clover，会发现存在睡眠后USB3失效问题。
+在以往（10.11-10.11.2），我都不用把USB的相关东西改名为ECHX，直接使用普通的0x0d 10.11 USB补丁，Darwin到Windows模拟，加上FakeXHCI即可相当完美。但是，到了2016年，10.11.3系统配合新的clover，会发现存在睡眠后USB3失效问题。
 
 现在我准备按照Rehabman的推荐，仅仅使用10.11普通USB补丁，加附带的改名为ECHX，加上操作系统模拟，加上FakeXHCI。
 
