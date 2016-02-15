@@ -79,10 +79,15 @@ Rename B0D3 to HDAU会在集成显卡的位置插入一个简单的_DSM。如果
 [http://raw.github.com/Yuki-Judai/dxxs-DSDT-Patch/master](http://raw.github.com/Yuki-Judai/dxxs-DSDT-Patch/master)
 
 ##USB
+10.11 USB相关的研究一直有，就是说就连Rehabman都在一直改写USB的适配方法。
 
-首先使用0X0D不要重命名，之后再安装FakeXhci即可正确识别和使用正确的USB总线（2.0或3.0，根据设备种类而不同）。
+在以往（10.11-10.11.2），我都不用把USB的相关东西改名为ECHX，直接使用普通的10.11 USB补丁，Darwin到Windows模拟，加上FakeXHCI即可相当完美。但是，到了2016年，10.11.3系统配合新的clover，会发现存在睡眠后USB3失效问题。
 
-当然，你也可以采取比较麻烦的做法自行制作正确的USB injector，做好了给我一份:-D。
+现在我准备按照Rehabman的推荐，仅仅使用10.11普通USB补丁，加附带的改名为ECHX，加上操作系统模拟，加上FakeXHCI。
+
+理论上来说，这样足够驱动所有USB口不留麻烦了。
+
+当然，也可以采取比较麻烦的做法自行制作正确的USB injector，你如果做好了给我一份:-D。制作自己的injector也是以改名为前提的。
 
 ##显卡
 
