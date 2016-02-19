@@ -96,7 +96,7 @@ Rename B0D3 to HDAU会在集成显卡的位置插入一个简单的_DSM。如果
 
 
 - USB 0x0D补丁，改名。
-- FakeXHCI
+- FakeXHCI（可选）
 - 自己的USB injector
 
 理论上来说，这样足够驱动所有USB口不留麻烦了。
