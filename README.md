@@ -10,7 +10,7 @@ BIOS Version BP212.
 ### 怎样安装更新
 **安装系统更新时可能会影响到USB驱动，某些奇葩USB外设也可能阻止你在安装更新后重启电脑，所以，拔掉这些USB外设才能比较好的更新。**
 
-更新系统之后，需要先更新缓存再启动，也就是说，请先用without cache启动OS X，进入系统再重建缓存，如此即完成整个更新流程。
+更新系统之后，需要先更新缓存再普通启动。也就是说，请先用without cache启动OS X，进入系统再重建缓存，如此即完成整个更新流程。
 
 
 ### Clover推荐配置
@@ -33,7 +33,8 @@ BIOS Version BP212.
 
 因此 如果你的CPU状况与我相仿,应该效仿我的目前的配置.
 
-不然,你应该首先考虑我的i3分支.
+不然,你应该首先考虑我的i3分支。
+国内一般的i3-4000M对10.9以上的系统都是不兼容，你需要自行刷新微码或是更换CPU。
 
 ##为何应该自己做DSDT 
 
@@ -63,16 +64,16 @@ BIOS Version BP212.
 
 3 折中方法，只移除SSDT5的DSM，有效。
 
-4 折中方法突然失效，**只在Mac OS X 登陆后风扇狂转，睡眠再唤醒即正常**确认自定义DSDT和SSDT没有发生新问题。这很诡异，那么问题何在呢？  **通过我的猜想和验证，这可能发生在新安装了UBuntu系统之后，而重新进入BIOS，随便改点设置然后保存设置即可修复此问题。**DSDT和SSDT表都来自BIOS，也许是BIOS中的数据与DSDT中的存在冲突了。或说，我可能遭遇了浮点数问题，Clover的 ACPI Fix中的**fixregions**就专门为此而生，建议你也用上。
+后来有几天，折中方法突然失效。笔记本在登陆**Mac OS X 后风扇狂转，睡眠再唤醒即正常**，我确认自定义的DSDT和SSDT相比之前没有发生任何改变。这很诡异，那么问题何在呢？  **通过我的猜想和验证，这可能发生在新安装了UBuntu系统之后，而重新进入BIOS，随便改点设置然后保存设置即可修复此问题。**DSDT和SSDT表都来自BIOS，也许是BIOS中的数据与DSDT中的存在冲突了。或说，我可能遭遇了浮点数问题，Clover的 ACPI Fix中的**fixregions**就专门为此而生，建议你也用上。
 
 ##使用SSDT直接来加入显卡的ig-platform-id
 Rename B0D3 to HDAU会在集成显卡的位置插入一个简单的_DSM。如果用clover来加入这个显卡的ig-platform-id ,很可能会遭遇这里重复定义的_DSM,以至于显卡驱动失败.
 
-所以,应当,先用Rename B0D3 to HDAU 然后直接用DSDT补丁加入显卡ig-platform-id,这样的做法,后来的_DSM将和为声卡添加的_DSM合并，自然也就不会存在两个补丁的冲突问题了.
+所以,应当,先用Rename B0D3 to HDAU 然后直接用DSDT补丁加入显卡ig-platform-id,这样的做法,后来的_DSM将和为声卡添加的_DSM合并，自然也就不会存在两个补丁（两个DSM）的冲突问题了.
 
 ##电池代码
 
-电池代码我已在之前提交到了PCBETA的一位热心版主的Github,直接添加
+电池代码我已在之前提交到了PCBETA的一位热心版主的Github,直接在maciASL添加
 
 
 
@@ -82,11 +83,11 @@ Rename B0D3 to HDAU会在集成显卡的位置插入一个简单的_DSM。如果
 10.11 USB相关的研究一直有，就是说就连Rehabman都在一直改写USB的适配方法。
 
 我把USB驱动大概分为三个等级的方法，处于偷懒的目的，我一直采用的是比较初级的方法。
-**首先，你应该做OSI修正或Darwin到Windows模拟。**
+**首先，你应该做OSI修正或是Darwin到Windows的模拟。**
 
 初级：
 
-- USB 0x0D补丁，注释改名代码，也即是说不改名。
+- USB 0x0D补丁，注释掉用以改名的代码，也即是说不改名。
 
 中级：
 - USB 0x0D补丁，同时启用改名。
@@ -101,13 +102,13 @@ Rename B0D3 to HDAU会在集成显卡的位置插入一个简单的_DSM。如果
 
 理论上来说，这样足够驱动所有USB口不留麻烦了。
 
-USB相关DSDT改名的事，也可以用clover来做，这特别适合处理遗留的代码。
+USB相关DSDT改名的事，也可以用clover来做，这特别适合处理遗留的代码，实际上用clover来自动完善DSDT还更方便。
 
 三种等级的方法一脉相承，我因为历史原因还用的是介于初级和中级间的方法。。
 
 ##显卡
 
-HD4600使用FakePCIID和FakeHD4600驱动，配合DSDT的正确的ig-platform-id和Device iD。Rehabman graphics_HD4600_yosemite.txt。
+HD4600使用FakePCIID和FakeHD4600驱动，配合DSDT的正确的ig-platform-id和Device iD，具体来说是Rehabman graphics_HD4600_yosemite.txt。
 
 ### 用到的其它DSDT Patch
 
@@ -115,20 +116,21 @@ HD4600使用FakePCIID和FakeHD4600驱动，配合DSDT的正确的ig-platform-id�
 
 ##网卡
 
-推荐使用AR9280，将REGdomain设置到0x11。这是最完美的选择，对于的是HK（对这张卡，0x21是错误的以讹传讹，人云亦云的HK）。
+推荐使用AR9280，将REGdomain设置到0x11，这是最完美的选择（对这张卡，0x21是错误的以讹传讹，人云亦云的HK）。
 
-附带说一句，OS X和WIndows10都是自动能使用软件方法启用APTX编码，与具体的蓝牙适配器是否支持APTX关系不大，与蓝牙版本关系不大。
+附带说一句，OS X和WIndows10都是自动能使用软件方法启用APTX编码，与具体的蓝牙适配器是否支持APTX关系不大，与蓝牙版本关系不大。所以，买一张支持11AC和蓝牙的网卡其实也是值得的。
 
 ##声卡 
 ALC282 使用Clover配合dummyHDA即可使用原版APPLEHDA。
 
 Clover加入以下代码再配合使用DummyHDA，设置声卡layoutid为3.
 
-**DummyHDA已经上传。安装DummyHDA和CodecCommander到EE目录，修改Clover config.plist，然后重启选择without cache启动，再重建缓存修复权限。
-**
+DummyHDA已经上传，你需要做的是：
 
-**下次重启的时候，声卡就搞定了。
-**
+安装DummyHDA和CodecCommander到EE目录，修改Clover config.plist，然后重启选择without cache启动，再重建缓存修复权限，再次正常重启进入系统。
+
+
+
 ```
 			<dict>
 				<key>Comment</key>
