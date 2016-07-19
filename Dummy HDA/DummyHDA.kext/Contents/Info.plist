@@ -89,20 +89,13 @@
 			<array>
 				<dict>
 					<key>AFGLowPowerState</key>
-					<data>
-					AwAAAA==
-					</data>
+					<data>AwAAAA==</data>
 					<key>Codec</key>
 					<string>Intruders - Realtek ALC282</string>
 					<key>CodecID</key>
 					<integer>283902594</integer>
 					<key>ConfigData</key>
-					<data>
-					ASccQAEnHQABJx6gAScfkAFHHBABRx0AAUce
-					FwFHH5ABhxwwAYcdEAGHHoEBhx8AAeccIAHn
-					HRAB5x5EAecfAAIXHFACFx0QAhceIQIXHwAB
-					RwwC
-					</data>
+					<data>ASccQAEnHQABJx6gAScfkAFHHBABRx0AAUceFwFHH5ABhxwwAYcdEAGHHoEBhx8AAeccIAHnHRAB5x5EAecfAAIXHFACFx0QAhceIQIXHwABRwwC</data>
 					<key>FuncGroup</key>
 					<integer>1</integer>
 					<key>LayoutID</key>
@@ -123,6 +116,10 @@
 	<string>Copyright © 2005-2014 Apple Inc. All rights reserved.</string>
 	<key>OSBundleLibraries</key>
 	<dict>
+		<key>com.apple.iokit.IOPCIFamily</key>
+		<string>1.1</string>
+		<key>com.apple.iokit.IOACPIFamily</key>
+		<string>1.2.0a1</string>
 		<key>com.apple.driver.AppleHDAController</key>
 		<string>1.7.2a1</string>
 		<key>com.apple.driver.DspFuncLib</key>
