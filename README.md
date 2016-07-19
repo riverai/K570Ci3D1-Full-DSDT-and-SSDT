@@ -67,9 +67,9 @@ BIOS Version BP212.
 后来有几天，折中方法突然失效。笔记本在登陆**Mac OS X 后风扇狂转，睡眠再唤醒即正常**，我确认自定义的DSDT和SSDT相比之前没有发生任何改变。这很诡异，那么问题何在呢？  **通过我的猜想和验证，这可能发生在新安装了UBuntu系统之后，而重新进入BIOS，随便改点设置然后保存设置即可修复此问题。**DSDT和SSDT表都来自BIOS，也许是BIOS中的数据与DSDT中的存在冲突了。或说，我可能遭遇了浮点数问题，Clover的 ACPI Fix中的**fixregions**就专门为此而生，建议你也用上。
 
 ##使用SSDT直接来加入显卡的ig-platform-id
-Rename B0D3 to HDAU会在集成显卡的位置插入一个简单的_DSM。如果用clover来加入这个显卡的ig-platform-id ,很可能会遭遇这里重复定义的_DSM,以至于显卡驱动失败.
+Rename B0D3 to HDAU会在HDAU和集成显卡（IGPU）的位置插入一个简单的_DSM。如果用clover来加入这个显卡的ig-platform-id ,很可能会遭遇这里重复定义的_DSM,以至于显卡驱动失败.
 
-所以,应当,先用Rename B0D3 to HDAU 然后直接用DSDT补丁加入显卡ig-platform-id,这样的做法,后来的_DSM将和为声卡添加的_DSM合并，自然也就不会存在两个补丁（两个DSM）的冲突问题了.
+所以,应当,先用Rename B0D3 to HDAU 然后直接用DSDT补丁加入显卡ig-platform-id,这样的做法,后来的_DSM将和为声卡添加的_DSM合并，自然也就不会存在两个补丁（两个DSM），反正你合并了两个_DSM ，得到了一个正确的_DSM。这与你能否成功驱动HDMI音频非常有关系，只要这里对了，使用HDMI音频根本毫无困难。
 
 ##电池代码
 
@@ -176,6 +176,24 @@ DummyHDA已经上传，你需要做的是：
 			</dict>
 ```
 
+###关于HDMI音频输出
+
+直接添加以下补丁，再安装FakePCIID_Intel_HDMI_Audio.kext。
+
+```
+<dict>
+				<key>Comment</key>
+				<string>HDMI-audio, port 0105(12), 0x0a260005 0x0a260006, 0x0d220003, 0x0a2e000a, 0x0a26000a</string>
+				<key>Disabled</key>
+				<false/>
+				<key>Name</key>
+				<string>AppleIntelFramebufferAzul</string>
+				<key>Find</key>
+				<data>AQUJAAAEAACHAAAA</data>
+				<key>Replace</key>
+				<data>AQUSAAAIAACHAAAA</data>
+			</dict>
+```
 
 ###开机阶段花屏与调节分辨率偶发花屏
 
