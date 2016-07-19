@@ -181,7 +181,7 @@ DummyHDA已经上传，你需要做的是：
 直接添加以下补丁，再安装FakePCIID_Intel_HDMI_Audio.kext。
 
 ```
-<dict>
+				<dict>
 				<key>Comment</key>
 				<string>HDMI-audio, port 0105(12), 0x0a260005 0x0a260006, 0x0d220003, 0x0a2e000a, 0x0a26000a</string>
 				<key>Disabled</key>
@@ -212,3 +212,4 @@ DummyHDA已经上传，你需要做的是：
 这些都是小问题，我也懒得花时间详细测试来说得清清楚楚。目前我依然选择的是纯UEFI启动方式。
 
 ## The End
+
