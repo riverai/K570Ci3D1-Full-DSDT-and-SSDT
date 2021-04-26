@@ -8315,10 +8315,6 @@ Store(Arg3, MW00)
                     })
                 }
             }
-            Device (IMEI)
-            {
-                Name (_ADR, 0x00160000)
-            }
         }
     }
 
