@@ -3725,17 +3725,6 @@ DefinitionBlock ("SSDT4.aml", "SSDT", 1, "HASEE ", "PARADISE", 0x00003000)
                     Return (CRS2)
                 }
             }
-            Method (_DSM, 4, NotSerialized)
-            {
-                If (LEqual (Arg2, Zero)) { Return (Buffer() { 0x03 } ) }
-                Return (Package()
-                {
-                    "device-id", Buffer() { 0x12, 0x04, 0x00, 0x00 },
-                    "AAPL,ig-platform-id", Buffer() { 0x06, 0x00, 0x26, 0x0a },
-                    "hda-gfx", Buffer() { "onboard-1" },
-                    "model", Buffer() { "Intel HD 4600" },
-                })
-            }
             
         }
     }
