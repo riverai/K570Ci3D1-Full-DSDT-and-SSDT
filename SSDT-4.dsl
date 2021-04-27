@@ -48,7 +48,7 @@ DefinitionBlock ("SSDT4.aml", "SSDT", 1, "HASEE ", "PARADISE", 0x00003000)
     External (_SB_.PCI0.AR02, PkgObj)
     External (_SB_.PCI0.AR0A, PkgObj)
     External (_SB_.PCI0.AR0B, PkgObj)
-    External (_SB_.PCI0.LPCB.EC0_.SW2S, FieldUnitObj)
+    External (_SB_.PCI0.LPCB.EC__.SW2S, FieldUnitObj)
     External (_SB_.PCI0.PR02, PkgObj)
     External (_SB_.PCI0.PR0A, PkgObj)
     External (_SB_.PCI0.PR0B, PkgObj)
@@ -2364,7 +2364,7 @@ DefinitionBlock ("SSDT4.aml", "SSDT", 1, "HASEE ", "PARADISE", 0x00003000)
                 {
                     If (LEqual (\_SB.CUNM, 0x02))
                     {
-                        If (\_SB.PCI0.LPCB.EC0.SW2S)
+                        If (\_SB.PCI0.LPCB.EC.SW2S)
                         {
                             CMSW (0x63, Arg0)
                         }
@@ -2390,7 +2390,7 @@ DefinitionBlock ("SSDT4.aml", "SSDT", 1, "HASEE ", "PARADISE", 0x00003000)
                 {
                     If (LEqual (\_SB.CUNM, 0x02))
                     {
-                        If (\_SB.PCI0.LPCB.EC0.SW2S)
+                        If (\_SB.PCI0.LPCB.EC.SW2S)
                         {
                             Store (CMSR (0x63), Local0)
                         }
@@ -2652,7 +2652,7 @@ DefinitionBlock ("SSDT4.aml", "SSDT", 1, "HASEE ", "PARADISE", 0x00003000)
                 {
                     If (LEqual (\_SB.CUNM, 0x02))
                     {
-                        If (\_SB.PCI0.LPCB.EC0.SW2S)
+                        If (\_SB.PCI0.LPCB.EC.SW2S)
                         {
                             CMSW (0x63, Arg0)
                         }
@@ -2677,7 +2677,7 @@ DefinitionBlock ("SSDT4.aml", "SSDT", 1, "HASEE ", "PARADISE", 0x00003000)
                 {
                     If (LEqual (\_SB.CUNM, 0x02))
                     {
-                        If (\_SB.PCI0.LPCB.EC0.SW2S)
+                        If (\_SB.PCI0.LPCB.EC.SW2S)
                         {
                             Store (CMSR (0x63), Local0)
                         }
