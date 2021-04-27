@@ -11676,23 +11676,12 @@ P8XH (0x04, 0xE2, Zero)
                     }
                 }
             }
-            Name(_PRW, Package() { 0x0D, 0 })
-            Method (_DSM, 4, NotSerialized)
-            {
-                If (LEqual (Arg2, Zero)) { Return (Buffer() { 0x03 } ) }
-                Return (Package()
-                {
-                    "subsystem-id", Buffer() { 0x70, 0x72, 0x00, 0x00 },
-                    "subsystem-vendor-id", Buffer() { 0x86, 0x80, 0x00, 0x00 },
-                    "AAPL,current-available", 2100,
-                    "AAPL,current-extra", 2200,
-                    "AAPL,current-extra-in-sleep", 1600,
-                    "AAPL,device-internal", 0x02,
-                    "AAPL,max-port-current-in-sleep", 2100,
-                })
-            }
 
-            
+            Name (_PRW, Package (0x02)  // _PRW: Power Resources for Wake
+            {
+                0x0D, 
+                0x03
+            })
         }
 
         Device (EHC2)
@@ -11857,23 +11846,12 @@ P8XH (0x04, 0xE2, Zero)
                     }
                 }
             }
-            Name(_PRW, Package() { 0x0D, 0 })
-            Method (_DSM, 4, NotSerialized)
-            {
-                If (LEqual (Arg2, Zero)) { Return (Buffer() { 0x03 } ) }
-                Return (Package()
-                {
-                    "subsystem-id", Buffer() { 0x70, 0x72, 0x00, 0x00 },
-                    "subsystem-vendor-id", Buffer() { 0x86, 0x80, 0x00, 0x00 },
-                    "AAPL,current-available", 2100,
-                    "AAPL,current-extra", 2200,
-                    "AAPL,current-extra-in-sleep", 1600,
-                    "AAPL,device-internal", 0x02,
-                    "AAPL,max-port-current-in-sleep", 2100,
-                })
-            }
 
-            
+            Name (_PRW, Package (0x02)  // _PRW: Power Resources for Wake
+            {
+                0x0D, 
+                0x03
+            })
         }
 
         Device (XHC)
@@ -13401,23 +13379,12 @@ P8XH (0x04, 0xE2, Zero)
                     }
                 }
             }
-            Name(_PRW, Package() { 0x0D, 0 })
-            Method (_DSM, 4, NotSerialized)
-            {
-                If (LEqual (Arg2, Zero)) { Return (Buffer() { 0x03 } ) }
-                Return (Package()
-                {
-                    "subsystem-id", Buffer() { 0x70, 0x72, 0x00, 0x00 },
-                    "subsystem-vendor-id", Buffer() { 0x86, 0x80, 0x00, 0x00 },
-                    "AAPL,current-available", 2100,
-                    "AAPL,current-extra", 2200,
-                    "AAPL,current-extra-in-sleep", 1600,
-                    "AAPL,device-internal", 0x02,
-                    "AAPL,max-port-current-in-sleep", 2100,
-                })
-            }
 
-            
+            Name (_PRW, Package (0x02)  // _PRW: Power Resources for Wake
+            {
+                0x0D, 
+                0x03
+            })
         }
 
         Device (HDEF)
@@ -13437,9 +13404,15 @@ P8XH (0x04, 0xE2, Zero)
                     ,   6, 
                 PMES,   1
             }
-            Name(_PRW, Package() { 0x0D, 0 })
 
-            
+            Method (_PRW, 0, NotSerialized)  // _PRW: Power Resources for Wake
+            {
+                Return (Package (0x02)
+                {
+                    0x0D, 
+                    Zero
+                })
+            }
         }
 
         Device (RP01)
