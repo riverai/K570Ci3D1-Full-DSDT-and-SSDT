@@ -11676,12 +11676,9 @@ P8XH (0x04, 0xE2, Zero)
                     }
                 }
             }
+            Name(_PRW, Package() { 0x0D, 0 })
 
-            Name (_PRW, Package (0x02)  // _PRW: Power Resources for Wake
-            {
-                0x0D, 
-                0x03
-            })
+            
         }
 
         Device (EHC2)
@@ -11846,12 +11843,9 @@ P8XH (0x04, 0xE2, Zero)
                     }
                 }
             }
+            Name(_PRW, Package() { 0x0D, 0 })
 
-            Name (_PRW, Package (0x02)  // _PRW: Power Resources for Wake
-            {
-                0x0D, 
-                0x03
-            })
+            
         }
 
         Device (XHC)
@@ -13379,12 +13373,9 @@ P8XH (0x04, 0xE2, Zero)
                     }
                 }
             }
+            Name(_PRW, Package() { 0x0D, 0 })
 
-            Name (_PRW, Package (0x02)  // _PRW: Power Resources for Wake
-            {
-                0x0D, 
-                0x03
-            })
+            
         }
 
         Device (HDEF)
@@ -13404,15 +13395,9 @@ P8XH (0x04, 0xE2, Zero)
                     ,   6, 
                 PMES,   1
             }
+            Name(_PRW, Package() { 0x0D, 0 })
 
-            Method (_PRW, 0, NotSerialized)  // _PRW: Power Resources for Wake
-            {
-                Return (Package (0x02)
-                {
-                    0x0D, 
-                    Zero
-                })
-            }
+            
         }
 
         Device (RP01)
