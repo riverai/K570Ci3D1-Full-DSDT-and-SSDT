@@ -1009,28 +1009,28 @@ DefinitionBlock ("DSDT.aml", "DSDT", 1, "HASEE ", "PARADISE", 0x00000000)
 
             Method (UPBI, 0, NotSerialized)
             {
-                Store (B1B2(^^PCI0.LPCB.EC0.SCP0,^^PCI0.LPCB.EC0.SCP1), Index (PBIF, One))
-                Store (B1B2(^^PCI0.LPCB.EC0.ACP0,^^PCI0.LPCB.EC0.ACP1), Index (PBIF, 0x02))
-                Store (B1B2(^^PCI0.LPCB.EC0.SVG0,^^PCI0.LPCB.EC0.SVG1), Index (PBIF, 0x04))
-                Store (Divide (B1B2(^^PCI0.LPCB.EC0.SCP0,^^PCI0.LPCB.EC0.SCP1), 0x0A, ), Index (PBIF, 0x05))
-                Store (Divide (B1B2(^^PCI0.LPCB.EC0.SCP0,^^PCI0.LPCB.EC0.SCP1), 0x64, ), Index (PBIF, 0x06))
+                Store (^^PCI0.LPCB.EC0.DSCP, Index (PBIF, One))
+                Store (^^PCI0.LPCB.EC0.LACP, Index (PBIF, 0x02))
+                Store (^^PCI0.LPCB.EC0.DSVG, Index (PBIF, 0x04))
+                Store (Divide (^^PCI0.LPCB.EC0.DSCP, 0x0A, ), Index (PBIF, 0x05))
+                Store (Divide (^^PCI0.LPCB.EC0.DSCP, 0x64, ), Index (PBIF, 0x06))
                 Store ("MWL32b", Index (PBIF, 0x09))
-                If (LLess (B1B2(^^PCI0.LPCB.EC0.SCP0,^^PCI0.LPCB.EC0.SCP1), 0x1770))
+                If (LLess (^^PCI0.LPCB.EC0.DSCP, 0x1770))
                 {
                     Store ("MWL32b", Index (PBIF, 0x09))
                 }
 
-                If (LLess (B1B2(^^PCI0.LPCB.EC0.SCP0,^^PCI0.LPCB.EC0.SCP1), 0x0BB8))
+                If (LLess (^^PCI0.LPCB.EC0.DSCP, 0x0BB8))
                 {
                     Store ("MWL31b", Index (PBIF, 0x09))
                 }
 
-                Store (^^PCI0.LPCB.EC0.RECB(0xD2,64), Index (PBIF, 0x0C))
+                Store (^^PCI0.LPCB.EC0.BANA, Index (PBIF, 0x0C))
             }
 
             Method (UPBS, 0, NotSerialized)
             {
-                If (LEqual (B1B2(^^PCI0.LPCB.EC0.BRM0,^^PCI0.LPCB.EC0.BRM1), Zero))
+                If (LEqual (^^PCI0.LPCB.EC0.MBRM, Zero))
                 {
                     Store (One, BTUR)
                 }
@@ -1044,15 +1044,15 @@ DefinitionBlock ("DSDT.aml", "DSDT", 1, "HASEE ", "PARADISE", 0x00000000)
                     }
                 }
 
-                Store (B1B2(^^PCI0.LPCB.EC0.CUR0,^^PCI0.LPCB.EC0.CUR1), Local5)
+                Store (^^PCI0.LPCB.EC0.MCUR, Local5)
                 Store (POSW (Local5), Index (PBST, One))
-                Store (B1B2(^^PCI0.LPCB.EC0.BRM0,^^PCI0.LPCB.EC0.BRM1), Local5)
+                Store (^^PCI0.LPCB.EC0.MBRM, Local5)
                 If (LEqual (^^PCI0.LPCB.EC0.S3CF, One))
                 {
-                    Add (Divide (B1B2(^^PCI0.LPCB.EC0.SCP0,^^PCI0.LPCB.EC0.SCP1), 0x32, ), B1B2(^^PCI0.LPCB.EC0.BRM0,^^PCI0.LPCB.EC0.BRM1), Local5)
+                    Add (Divide (^^PCI0.LPCB.EC0.DSCP, 0x32, ), ^^PCI0.LPCB.EC0.MBRM, Local5)
                 }
 
-                Store (B1B2(^^PCI0.LPCB.EC0.BRM0,^^PCI0.LPCB.EC0.BRM1), Local5)
+                Store (^^PCI0.LPCB.EC0.MBRM, Local5)
                 If (LNot (And (Local5, 0x8000)))
                 {
                     If (LNotEqual (Local5, DerefOf (Index (PBST, 0x02))))
@@ -1061,7 +1061,7 @@ DefinitionBlock ("DSDT.aml", "DSDT", 1, "HASEE ", "PARADISE", 0x00000000)
                     }
                 }
 
-                Store (B1B2(^^PCI0.LPCB.EC0.BCV0,^^PCI0.LPCB.EC0.BCV1), Index (PBST, 0x03))
+                Store (^^PCI0.LPCB.EC0.MBCV, Index (PBST, 0x03))
                 Store (^^PCI0.LPCB.EC0.MBST, Index (PBST, Zero))
             }
 
@@ -1074,7 +1074,7 @@ DefinitionBlock ("DSDT.aml", "DSDT", 1, "HASEE ", "PARADISE", 0x00000000)
                 Store ("Bad", Index (PBIF, 0x0A))
                 Store ("Bad", Index (PBIF, 0x0B))
                 Store ("Bad", Index (PBIF, 0x0C))
-                ^^PCI0.LPCB.EC0.WECB(0xD2,64,Zero)
+                Store (Zero, ^^PCI0.LPCB.EC0.BANA)
             }
 
             Method (IVBS, 0, NotSerialized)
@@ -4089,9 +4089,9 @@ DefinitionBlock ("DSDT.aml", "DSDT", 1, "HASEE ", "PARADISE", 0x00000000)
                             ,   5, 
                         INST,   1, 
                         Offset (0x70), 
-                        SCP0,8,SCP1,8, 
-                        ACP0,8, ACP1,8, 
-                        SVG0,8, SVG1,8, 
+                        DSCP,   16, 
+                        LACP,   16, 
+                        DSVG,   16, 
                         Offset (0x77), 
                         ECTH,   8, 
                         ECTL,   8, 
@@ -4100,9 +4100,9 @@ DefinitionBlock ("DSDT.aml", "DSDT", 1, "HASEE ", "PARADISE", 0x00000000)
                         WLNP,   1, 
                         Offset (0x82), 
                         MBST,   8, 
-                        CUR0,8, CUR1,8, 
-                        BRM0,8, BRM1,8, 
-                        BCV0,8, BCV1,8, 
+                        MCUR,   16, 
+                        MBRM,   16, 
+                        MBCV,   16, 
                         Offset (0xA0), 
                         QBHK,   8, 
                         APIN,   1, 
@@ -4196,7 +4196,7 @@ DefinitionBlock ("DSDT.aml", "DSDT", 1, "HASEE ", "PARADISE", 0x00000000)
                         Offset (0xF4), 
                         SFAN,   8, 
                         Offset (0xFA), 
-                        ERN0,8,ERN1,8,ERN2,8,ERN3,8
+                        VERN,   32
                     }
 
                     Method (_Q09, 0, NotSerialized)  // _Qxx: EC Query
@@ -5114,7 +5114,7 @@ DefinitionBlock ("DSDT.aml", "DSDT", 1, "HASEE ", "PARADISE", 0x00000000)
                     Field (ERAM, ByteAcc, NoLock, Preserve)
                     {
                         Offset (0x04), 
-                        MW00,8, MW01,8
+                        SMW0,   16
                     }
 
                     Field (ERAM, ByteAcc, NoLock, Preserve)
@@ -5213,7 +5213,7 @@ DefinitionBlock ("DSDT.aml", "DSDT", 1, "HASEE ", "PARADISE", 0x00000000)
 
                             If (LEqual (Arg0, 0x09))
                             {
-                                Store (B1B2(MW00, MW01), Arg3)
+                                Store (SMW0, Arg3)
                             }
 
                             If (LEqual (Arg0, 0x0B))
@@ -5227,23 +5227,23 @@ DefinitionBlock ("DSDT.aml", "DSDT", 1, "HASEE ", "PARADISE", 0x00000000)
 
                                 If (LLess (Local3, 0x09))
                                 {
-                                    Store (RECB(0x04, 64), Local2)
+                                    Store (FLD0, Local2)
                                 }
                                 Else
                                 {
                                     If (LLess (Local3, 0x11))
                                     {
-                                        Store (RECB(0x04, 128), Local2)
+                                        Store (FLD1, Local2)
                                     }
                                     Else
                                     {
                                         If (LLess (Local3, 0x19))
                                         {
-                                            Store (RECB(0x04, 192), Local2)
+                                            Store (FLD2, Local2)
                                         }
                                         Else
                                         {
-                                            Store (RECB(0x04, 256), Local2)
+                                            Store (FLD3, Local2)
                                         }
                                     }
                                 }
@@ -5297,13 +5297,12 @@ DefinitionBlock ("DSDT.aml", "DSDT", 1, "HASEE ", "PARADISE", 0x00000000)
 
                             If (LEqual (Arg0, 0x08))
                             {
-                                Store(ShiftRight(Arg3,8), MW01)
-Store(Arg3, MW00)
+                                Store (Arg3, SMW0)
                             }
 
                             If (LEqual (Arg0, 0x0A))
                             {
-                                WECB(0x1C,256,Arg3)
+                                Store (Arg3, SMD0)
                             }
 
                             And (SMST, 0x40, SMST)
@@ -5480,51 +5479,6 @@ Store(Arg3, MW00)
 
                                 Return (Local0)
                             }
-                        }
-                    }
-                    Method (RE1B, 1, NotSerialized)
-                    {
-                        OperationRegion(ERAM, EmbeddedControl, Arg0, 1)
-                        Field(ERAM, ByteAcc, NoLock, Preserve) { BYTE, 8 }
-                        Return(BYTE)
-                    }
-                    Method (RECB, 2, Serialized)
-                    // Arg0 - offset in bytes from zero-based EC
-                    // Arg1 - size of buffer in bits
-                    {
-                        ShiftRight(Arg1, 3, Arg1)
-                        Name(TEMP, Buffer(Arg1) { })
-                        Add(Arg0, Arg1, Arg1)
-                        Store(0, Local0)
-                        While (LLess(Arg0, Arg1))
-                        {
-                            Store(RE1B(Arg0), Index(TEMP, Local0))
-                            Increment(Arg0)
-                            Increment(Local0)
-                        }
-                        Return(TEMP)
-                    }
-                    Method (WE1B, 2, NotSerialized)
-                    {
-                        OperationRegion(ERAM, EmbeddedControl, Arg0, 1)
-                        Field(ERAM, ByteAcc, NoLock, Preserve) { BYTE, 8 }
-                        Store(Arg1, BYTE)
-                    }
-                    Method (WECB, 3, Serialized)
-                    // Arg0 - offset in bytes from zero-based EC
-                    // Arg1 - size of buffer in bits
-                    // Arg2 - value to write
-                    {
-                        ShiftRight(Arg1, 3, Arg1)
-                        Name(TEMP, Buffer(Arg1) { })
-                        Store(Arg2, TEMP)
-                        Add(Arg0, Arg1, Arg1)
-                        Store(0, Local0)
-                        While (LLess(Arg0, Arg1))
-                        {
-                            WE1B(Arg0, DerefOf(Index(TEMP, Local0)))
-                            Increment(Arg0)
-                            Increment(Local0)
                         }
                     }
                 }
@@ -6177,7 +6131,7 @@ Store(Arg3, MW00)
                             {
                                 If (LEqual (MAR1, One))
                                 {
-                                    Store (B1B4(^^EC0.ERN0,^^EC0.ERN1,^^EC0.ERN2,^^EC0.ERN3), Local0)
+                                    Store (^^EC0.VERN, Local0)
                                     Store (Local0, Local1)
                                     Store (Local0, Local2)
                                     Store (Local0, Local3)
@@ -7175,7 +7129,7 @@ Store(Arg3, MW00)
                                     If (LEqual (GETW (Local0, 0x04), One))
                                     {
                                         SETW (Local0, 0x08, Zero)
-                                        Store (B1B4(^^EC0.ERN0,^^EC0.ERN1,^^EC0.ERN2,^^EC0.ERN3), Local1)
+                                        Store (^^EC0.VERN, Local1)
                                         Store (Local1, Local2)
                                         Store (Local1, Local3)
                                         Store (Local1, Local4)
@@ -15412,15 +15366,6 @@ Store(Arg3, MW00)
 
     Method (WAK, 1, NotSerialized)
     {
-    }
-    Method (B1B2, 2, NotSerialized) { Return(Or(Arg0, ShiftLeft(Arg1, 8))) }
-    Method (B1B4, 4, NotSerialized)
-    {
-        Store(Arg3, Local0)
-        Or(Arg2, ShiftLeft(Local0, 8), Local0)
-        Or(Arg1, ShiftLeft(Local0, 8), Local0)
-        Or(Arg0, ShiftLeft(Local0, 8), Local0)
-        Return(Local0)
     }
 }
 
