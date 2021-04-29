@@ -1,0 +1,290 @@
+K570C 电池代码自制补丁
+原来的杨先森做的，有可能有错，而且显示电池2016年生产，容量是2200mash。
+再说我也打算自己做，满足过去的心愿。
+
+
+OperationRegion (ERAM, EmbeddedControl, Zero, 0xFF)
+                    Field (ERAM, ByteAcc, NoLock, Preserve)
+                    {
+
+
+区域找到了 ，
+区域Eram，255位
+路径LPCB.EC0
+
+8个区域，太可怕了。
+
+区域1
+                    Field (ERAM, ByteAcc, NoLock, Preserve)
+                    {
+
+                        FSPD,   16, 
+
+                        DSCP,   16, 
+                        LACP,   16, 
+                        DSVG,   16, 
+ 
+                        MCUR,   16, 
+                        MBRM,   16, 
+                        MBCV,   16, 
+
+
+                        BANA,   64, 
+ 
+                        VERN,   32
+                    }
+
+
+区域2-8
+Field (ERAM, ByteAcc, NoLock, Preserve)
+                    {
+                        Offset (0x18), 
+ 
+                        SMD0,   256, 
+
+                        BATD,   16
+                    }
+
+                    Field (ERAM, ByteAcc, NoLock, Preserve)
+                    {
+                        Offset (0x04), 
+                        SMW0,   16
+                    }
+
+                    Field (ERAM, ByteAcc, NoLock, Preserve)
+                    {
+                        Offset (0x04), 
+
+                    }
+
+                    Field (ERAM, ByteAcc, NoLock, Preserve)
+                    {
+                        Offset (0x04), 
+                        FLD0,   64
+                    }
+
+                    Field (ERAM, ByteAcc, NoLock, Preserve)
+                    {
+                        Offset (0x04), 
+                        FLD1,   128
+                    }
+
+                    Field (ERAM, ByteAcc, NoLock, Preserve)
+                    {
+                        Offset (0x04), 
+                        FLD2,   192
+                    }
+
+                    Field (ERAM, ByteAcc, NoLock, Preserve)
+                    {
+                        Offset (0x04), 
+                        FLD3,   256
+                    }
+
+
+数一下：
+一共16个数。
+
+
+其中
+16位数：
+
+                        FSPD,   16, （只有一个CreateWordField，这到底算不算）
+
+                        DSCP,   16, 有（其他区域+EC0区域）
+                        LACP,   16, 有，同上
+                        DSVG,   16, 同上
+ 
+                        MCUR,   16, 有，map1
+                        MBRM,   16, 有，map1
+                        MBCV,   16, 有 ，map1
+                        BATD,   16 无
+                        SMW0,   16 有，map1
+32位数：
+                        VERN,   32 有，map1区域，表现就是调用区域不同，路径写法不同。那么到底哪个写法正确呢。
+
+64位数：
+
+                        BANA,   64,有，map1区域，写法奇怪。
+                        FLD0,   64 有，简单写法，也是map1区域。
+128位数：
+                        FLD1,   128 有，也是map1区域
+192位数：
+                        FLD2,   192 有，map1区域
+256位数：
+                        FLD3,   256 有，map1
+                        SMD0,   256, 有map1 只有写。所以这次就发现了两个32位以上的写。
+
+经过测试，查找的时候，左下角不会实时的显示出现在的区域，所以，所有的map1说法都没价值。
+
+
+准备制造补丁：16位数：
+
+
+                        DSCP,   16, 有（其他区域+EC0区域）
+                        LACP,   16, 有，同上
+                        DSVG,   16, 同上
+ 
+                        MCUR,   16, 有，map1
+                        MBRM,   16, 有，map1
+                        MBCV,   16, 有 ，map1
+                        SMW0,   16 有，map1
+
+先重命名原来的定义：
+
+# 16-bit registers
+into device label EC0 code_regex DSCP,\s+16 replace_matched begin SCP0,8,SCP1,8 end;
+into device label EC0 code_regex LACP,\s+16 replace_matched begin ACP0,8,ACP1,8 end;
+into device label EC0 code_regex DSVG,\s+16 replace_matched begin SVG0,8,SVG1,8 end;
+into device label EC0 code_regex MCUR,\s+16 replace_matched begin CUR0,8,CUR1,8 end;
+into device label EC0 code_regex MBRM,\s+16 replace_matched begin BRM0,8,BRM1,8 end;
+into device label EC0 code_regex MBCV,\s+16 replace_matched begin BCV0,8,BCV1,8 end;
+into device label EC0 code_regex SMW0,\s+16 replace_matched begin MW00,8,MW01,8 end;
+16位重命名全部完成。
+
+然后来重做16位求值函数替换原始16位。
+这个替换写法太奇葩了，原始的正则表达式就用的括号，问题是现在TM的竟然是....
+前面的有括号，后面的没括号
+有的是空格
+还有的带括号，到底换不换啊。
+B1B2函数的括号代表他们本身，所以之后的，括号，真就是额外的标记，注意换的次序。这个坑爹的地方是rehabman完全没说的。
+begin后面的部分，转译字符有效，但是不需要写出来。这个什么奇葩特性，这不是坑人吗。
+注意，正则表达式里面，,不是特殊字符,.是。
+begin后面加的空格是不算空格的，无效的。后面的空格才算。这谁设计的垃圾语法卧槽。我也直接用暴力出奇迹的方法，直接将可能的错误写死。
+\ 可以在后面代表一个空格
+你们为什么要那么写细致？非要区分左右？如果不区分左右，反而明显简单很多。
+
+# fix 16-bit methods
+into method label UPBI code_regex \(\^\^PCI0\.LPCB\.EC0\.DSCP, replaceall_matched begin (B1B2(^^PCI0.LPCB.EC0.SCP0,^^PCI0.LPCB.EC0.SCP1), end;
+into method label UPBS code_regex \(\^\^PCI0\.LPCB\.EC0\.DSCP, replaceall_matched begin (B1B2(^^PCI0.LPCB.EC0.SCP0,^^PCI0.LPCB.EC0.SCP1), end;
+
+
+into method label UPBI code_regex \(\^\^PCI0\.LPCB\.EC0\.LACP, replaceall_matched begin (B1B2(^^PCI0.LPCB.EC0.ACP0,^^PCI0.LPCB.EC0.ACP1), end;
+
+
+into method label UPBI code_regex \(\^\^PCI0\.LPCB\.EC0\.DSVG, replaceall_matched begin (B1B2(^^PCI0.LPCB.EC0.SVG0,^^PCI0.LPCB.EC0.SVG0), end;
+
+into method label UPBS code_regex \(\^\^PCI0\.LPCB\.EC0\.MCUR, replaceall_matched begin (B1B2(^^PCI0.LPCB.EC0.CUR0,^^PCI0.LPCB.EC0.CUR1), end;
+
+into method label UPBS code_regex \(\^\^PCI0\.LPCB\.EC0\.MBRM, replaceall_matched begin (B1B2(^^PCI0.LPCB.EC0.BRM0,^^PCI0.LPCB.EC0.BRM1), end;
+into method label UPBS code_regex \s+\^\^PCI0\.LPCB\.EC0\.MBRM,\s+Local5 replaceall_matched begin \ B1B2(^^PCI0.LPCB.EC0.BRM0,^^PCI0.LPCB.EC0.BRM1), Local5 end;
+
+into method label UPBS code_regex \(\^\^PCI0\.LPCB\.EC0\.MBCV, replaceall_matched begin (B1B2(^^PCI0.LPCB.EC0.BCV0,^^PCI0.LPCB.EC0.BCV1), end;
+
+
+into method label SMRD code_regex \(SMW0, replaceall_matched begin (B1B2(MW00,MW01), end;
+into method label SMWR code_regex SMW0\) replaceall_matched begin B1B2(MW00,MW01)) end;
+
+
+16位所有补丁完成。暂时未输入方法。目前我是用的非常严格的左右区分，虽然不知道为什么。
+
+
+根据我的计算，offset标记本身是不占用地址的，因为没有空间给他占用。
+就是说，在一个255的区域内，他们给的偏移量就可以直接操作内存地址，这就是他们的区别。
+offset，就是接下来的一个变量的起始位置，也是我们需要的数据。
+而且一般直接定义了255个字节，这些存放的地址并非是连续的，而是有跳跃的。所以经常会有offset跳出来换位置。
+
+而offset用的是16进制标记，这就是坑爹的地方了。
+就是说，地址是用16进制标记的，但是占用的位数是用10进制标记的。
+就是说，先16进制转换成10进制，然后相加，再回到16进制。
+
+这就是之前为什么有的地方我认为看明白了，有的地方没懂，因为有的
+
+
+准备制造补丁，32位数：
+VERN,   32
+
+先重命名
+# 32-bit registers
+
+into device label EC0 code_regex VERN,\s+32 replace_matched begin ERN0,8,ERN1,8,ERN2,8,ERN3,8 end;
+
+# fix 32-bit methods
+into method label WMAB code_regex \(\^\^EC0.VERN, replaceall_matched begin (B1B4(^^.EC0.ERN0,^^.EC0.ERN1,^^.EC0.ERN2,^^.EC0.ERN3), end;
+into method label WMBB code_regex \(\^\^EC0.VERN, replaceall_matched begin (B1B4(^^.EC0.ERN0,^^.EC0.ERN1,^^.EC0.ERN2,^^.EC0.ERN3), end;
+
+
+准备制造补丁 64位数：
+64位数：
+
+                        BANA,   64,有，map1区域，写法奇怪。读写都有，我去。
+                        FLD0,   64 有，简单写法，也是map1区域。
+
+
+准备重命名：
+# 64-bit registers
+into device label EC0 code_regex (BANA,)\s+(64) replace_matched begin ANAX,%2,//%1%2 end;
+into device label EC0 code_regex (FLD0,)\s+(64) replace_matched begin LD0X,%2,//%1%2 end;
+
+偏移量：
+BANA offset 0XD2
+FLD0 offset 0X04
+
+rehabman也是这样写的逻辑，很奇特。yang也是这样写的，唉。人家竟然是对的。
+store (zero, ^^lpcb.ec0.smd0)
+^^lpcb.ec0.wecb(ox64,246,zero) 看效果，就是将store完全改写了，所以之前的其实没必要了。
+示例代码：
+into method label ESMR code_regex Store\s+\(Zero,\s\^\^LPCB.EC0.SMD0\) replaceall_matched begin ^^LPCB.EC0.WECB(0x64,256,Zero) end;
+
+
+准备替代：
+# fix 64-bit methods
+
+into method label UPBI code_regex \(\^\^PCI0\.LPCB\.EC0\.BANA, replaceall_matched begin (^^PCI0.LPCB.EC0.RECB(0XD2,64), end;
+
+into method label IVBI code_regex Store\s+\(Zero,\s\^\^PCI0\.LPCB.EC0.BANA\) replaceall_matched begin ^^PCI0.LPCB.EC0.WECB(0XD2,64,Zero) end;
+
+
+into method label SMRD code_regex \(FLD0, replaceall_matched begin (RECB(0X04,64), end;
+
+
+准备128位数：
+128位数：
+                        FLD1,   0x04 128 有，也是map1区域
+
+重命名：
+# 128-bit registers
+
+into device label EC0 code_regex (FLD1,)\s+(128) replace_matched begin LD1X,%2,//%1%2 end;
+
+插入替代：
+# fix 128-bit methods
+into method label SMRD code_regex \(FLD1, replaceall_matched begin (RECB(0x04,128), end;
+
+准备192位数：
+192位数：
+                        FLD2,  0x04 192 有，map1区域
+
+重命名
+
+# 192-bit registers
+into device label EC0 code_regex (FLD2,)\s+(192) replace_matched begin LD2X,%2,//%1%2 end;
+
+插入替代：
+
+# fix 192-bit methods
+into method label SMRD code_regex \(FLD2, replaceall_matched begin (RECB(0x04,192), end;
+
+
+
+准备256位数：
+
+256位数：
+                        FLD3,  0x04 256 有，map1
+                        SMD0,   0x18 256, 有map1 只有写。所以这次就发现了两个32位以上的写。
+重命名：
+
+# 256-bit registers
+
+into device label EC0 code_regex (FLD3,)\s+(256) replace_matched begin LD3X,%2,//%1%2 end;
+into device label EC0 code_regex (SMD0,)\s+(256) replace_matched begin MD0X,%2,//%1%2 end;
+
+插入替代：
+
+# fix 256-bit methods
+into method label SMRD code_regex \(FLD3, replaceall_matched begin (RECB(0x04,256), end;
+
+
+into method label SMWR code_regex Store\s+\(Arg3,\sSMD0\) replaceall_matched begin WECB(0x18,256,arg3) end;
+
+
