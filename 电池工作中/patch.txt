@@ -60,9 +60,9 @@ into method label WMBB code_regex \(\^\^EC0.VERN, replaceall_matched begin (B1B4
 
 #插入RECB方法
 # utility methods to read/write buffers from/to EC
-into method label RE1B parent_label H_EC remove_entry;
-into method label RECB parent_label H_EC remove_entry;
-into device label H_EC insert
+into method label RE1B parent_label EC0 remove_entry;
+into method label RECB parent_label EC0 remove_entry;
+into device label EC0 insert
 begin
 Method (RE1B, 1, NotSerialized)\n
 {\n
@@ -89,9 +89,9 @@ Method (RECB, 2, Serialized)\n
 end;
 
 #插入WECB方法
-into method label WE1B parent_label H_EC remove_entry;
-into method label WECB parent_label H_EC remove_entry;
-into device label H_EC insert
+into method label WE1B parent_label EC0 remove_entry;
+into method label WECB parent_label EC0 remove_entry;
+into device label EC0 insert
 begin
 Method (WE1B, 2, NotSerialized)\n
 {\n
