@@ -55,8 +55,8 @@ Method (B1B4, 4, NotSerialized)\n
 end;
 
 # fix 32-bit methods
-into method label WMAB code_regex \(\^\^EC0.VERN, replaceall_matched begin (B1B4(^^.EC0.ERN0,^^.EC0.ERN1,^^.EC0.ERN2,^^.EC0.ERN3), end;
-into method label WMBB code_regex \(\^\^EC0.VERN, replaceall_matched begin (B1B4(^^.EC0.ERN0,^^.EC0.ERN1,^^.EC0.ERN2,^^.EC0.ERN3), end;
+into method label WMAB code_regex \(\^\^EC0.VERN, replaceall_matched begin (B1B4(^^EC0.ERN0,^^EC0.ERN1,^^EC0.ERN2,^^EC0.ERN3), end;
+into method label WMBB code_regex \(\^\^EC0.VERN, replaceall_matched begin (B1B4(^^EC0.ERN0,^^EC0.ERN1,^^EC0.ERN2,^^EC0.ERN3), end;
 
 #插入RECB方法
 # utility methods to read/write buffers from/to EC
